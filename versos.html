@@ -1,0 +1,55 @@
+<html>
+  <head>
+    <style>
+      .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+      .buttons {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px;
+      }
+      #verse {
+        width: 50%;
+        text-align: center;
+        background-color: #ddd;
+        padding: 20px;
+        border-radius: 5px;
+        margin-top: 20px;
+      }
+      #verse h3 {
+        margin-bottom: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="buttons">
+        <button id="fetchVerseButton">Get Verse</button>
+      </div>
+      <div id="verse"></div>
+    </div>
+    <script>
+      document.querySelector('#fetchVerseButton').addEventListener('click', function () {
+        fetch('https://www.abibliadigital.com.br/api/verses/nvi/random')
+          .then(response => {
+            if (!response.ok) {
+              throw new Error("HTTP error, status = " + response.status);
+            }
+            return response.json();
+          })
+          .then(verse => {
+            let verseDiv = document.querySelector('#verse');
+            verseDiv.innerHTML = `<h3>${verse.book.name} ${verse.chapter}:${verse.number}</h3><p>${verse.text}</p>`;
+          })
+          .catch(error => {
+            console.error(error);
+            alert("Ocorreu um erro ao buscar o verso.");
+          });
+      }, false);
+    </script>
+  </body>
+</html>
